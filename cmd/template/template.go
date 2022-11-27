@@ -17,7 +17,7 @@ import (
 
 	logUtils "github.com/madkins23/go-utils/log"
 
-	"github.com/madkins23/gin-zerolog/ginzero"
+	"gin-utils/pkg/ginzero"
 )
 
 const appName = "template"
