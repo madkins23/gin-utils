@@ -14,6 +14,18 @@ Can provide:
 
 # Graceful Shutdown
 
+Import packages using:
+
+    import (
+        "github.com/gin-gonic/gin"
+        "github.com/rs/zerolog"
+        "github.com/rs/zerolog/log"
+
+        "github.com/madkins23/gin-utils/pkg/shutdown"
+    )
+
+## Usage
+
 # Logging via `zerolog`
 
 ## Usage
