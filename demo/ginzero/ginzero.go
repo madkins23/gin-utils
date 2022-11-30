@@ -4,9 +4,6 @@ demo of ginzero package to support using [zerolog] with [gin].
 Once running the application responds to http://:55555/ping with:
   {"message":"pong"}
 
-Usage:
-  demo
-
 [gin]: https://gin-gonic.com/docs/
 [zerolog]: https://github.com/rs/zerolog
 */
