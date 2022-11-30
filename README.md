@@ -19,6 +19,8 @@ Support graceful shutdown of `gin` during an interrupt signal.
 This tool captures the Linux `interrupt` and `kill` signals,
 so it won't work (completely) with Apple or Windows.
 
+There is a demo program located in `demo/shutdown/shutdown.go`.
+
 See package `shutdown` documentation for more details.
 
 # Logging via `zerolog`
@@ -27,7 +29,7 @@ Support for connecting gin logging to `zerolog`.
 This includes request-logging middleware and
 the capture and reprocessing of `stderr` and `stdout` streams.
 
-There is a demo program located in `demo/ginzerolog/ginzerolog.go`.
+There is a demo program located in `demo/ginzerolog/ginzero.go`.
 
 See package `ginzero` documentation for more details.
 
