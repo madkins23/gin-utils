@@ -5,6 +5,7 @@ Can provide:
 
 * Graceful shutdown of [`gin`](https://github.com/gin-gonic/gin) server
 * Redirection of [`gin`](https://github.com/gin-gonic/gin) log messages to [`zerolog`](https://github.com/rs/zerolog)
+* Some simple [`gin`](https://github.com/gin-gonic/gin) handlers
 * Template application using [`gin`](https://github.com/gin-gonic/gin) and [`zerolog`](https://github.com/rs/zerolog)
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/madkins23/gin-zerolog)](https://goreportcard.com/report/github.com/madkins23/gin-zerolog)
@@ -14,65 +15,30 @@ Can provide:
 
 # Graceful Shutdown
 
-Import packages using:
+Support graceful shutdown of `gin` during an interrupt signal.
+This tool captures the Linux `interrupt` and `kill` signals,
+so it won't work (completely) with Apple or Windows.
 
-    import (
-        "github.com/gin-gonic/gin"
-        "github.com/rs/zerolog"
-        "github.com/rs/zerolog/log"
-
-        "github.com/madkins23/gin-utils/pkg/shutdown"
-    )
-
-## Usage
+See package `shutdown` documentation for more details.
 
 # Logging via `zerolog`
 
-## Usage
-
-Import packages using:
-
-    import (
-        "github.com/gin-gonic/gin"
-        "github.com/rs/zerolog"
-        "github.com/rs/zerolog/log"
-
-        "github.com/madkins23/gin-utils/pkg/ginzero"
-    )
-
-## Tools
+Support for connecting gin logging to `zerolog`.
+This includes request-logging middleware and
+the capture and reprocessing of `stderr` and `stdout` streams.
 
 There is a demo program located in `demo/ginzerolog/ginzerolog.go`.
 
-### Middleware
+See package `ginzero` documentation for more details.
 
-The basic logging for request traffic in `gin` is generally handled via middleware.
-The existing default middleware sends request data to the default
-logging streams with some formatting.
+## Simple Handlers
 
-Add the `ginzero` logger using the following:
+A small collection of simpler `gin` handlers is provided in the `handler` package.
+These include:
 
-    router := gin.New() // not gin.Default()
-    router.Use(ginzero.Logger())
-
-Add routing configuration after these statements.
-
-Use `gin.New()` instead of `gin.Default()`.
-The latter adds its own logging middleware
-which would conflict with the `ginzero` middleware.
-
-### IO Writer
-
-There is some `gin` logging of non-request issues that just goes to
-the default logging streams.
-This mostly happens at startup.
-These streams can be replaced with any `IO.Writer` entity.
-
-Trap and redirect these streams to `zerolog` using the following:
-
-    gin.DefaultWriter = ginzero.NewWriter(zerolog.InfoLevel)
-    gin.DefaultErrorWriter = ginzero.NewWriter(zerolog.ErrorLevel)
-    router := gin.New() // or gin.Default() if not using ginzero.Logger()
-
+* `Ping` handler to return a 200 "Pong!" response.
+* `Exit` handler to send a `SIGINT` signal to the current process,
+  thereby ending the service.
 
 ## Application Template
+

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -14,6 +13,7 @@ import (
 	logUtils "github.com/madkins23/go-utils/log"
 
 	"gin-utils/pkg/ginzero"
+	"gin-utils/pkg/handler"
 	"gin-utils/pkg/shutdown"
 )
 
@@ -39,7 +39,7 @@ func main() {
 	}
 	defer cof.CloseForDefer()
 
-	// TODO: check port number
+	// TODO: check port number?
 
 	// Initialize for graceful shutdown.
 	graceful := &shutdown.Graceful{}
@@ -51,18 +51,8 @@ func main() {
 	router := gin.New() // not gin.Default()
 	router.Use(ginzero.Logger())
 
-	router.GET("/exit", func(c *gin.Context) {
-		graceful.Interrupt()
-		c.JSON(http.StatusOK, gin.H{
-			"message": "exiting",
-		})
-	})
-
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
+	router.GET("/exit", handler.Exit)
+	router.GET("/ping", handler.Ping)
 
 	log.Logger.Info().Msgf("Application %s starting", appName)
 	log.Logger.Info().Msgf("> http://localhost:%d/ping", port)
@@ -72,8 +62,4 @@ func main() {
 	if err := graceful.Serve(router, port); err != nil {
 		log.Fatal().Err(err).Msg("Running gin server")
 	}
-
-	// Restore default behavior on the interrupt signal and notify user of shutdown.
-	graceful.Close()
-
 }

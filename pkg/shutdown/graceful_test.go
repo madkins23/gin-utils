@@ -2,8 +2,6 @@ package shutdown
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"net/http"
 	"os"
 	"syscall"
@@ -11,9 +9,19 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/require"
 
+	"github.com/madkins23/go-utils/server"
+
 	"gin-utils/pkg/ginzero"
+	"gin-utils/pkg/handler"
+)
+
+const (
+	port    = 8080
+	timeout = 100 * time.Millisecond
+	url     = "http://localhost:8080/ping"
 )
 
 func TestGraceful_Initialize(t *testing.T) {
@@ -34,7 +42,7 @@ func TestGraceful_Initialize(t *testing.T) {
 
 func TestGraceful_Interrupt(t *testing.T) {
 	g := initialized(t)
-	g.Interrupt()
+	require.NoError(t, server.Interrupt())
 	done := false
 	select {
 	case <-g.ctxt.Done():
@@ -60,7 +68,7 @@ func TestGraceful_Serve(t *testing.T) {
 	go func() { require.NoError(t, g.Serve(router, 8080)) }()
 
 	// Wait for router to respond properly.
-	require.NoError(t, waitForServer())
+	require.NoError(t, server.WaitFor(url, timeout))
 
 	ctxt, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
@@ -86,28 +94,30 @@ func initialized(t *testing.T) *Graceful {
 	return g
 }
 
-const (
-	serverURL  = "http://localhost:8080/ping"
-	serverWait = 3 * time.Second
-)
+//////////////////////////////////////////////////////////////////////////
 
-// waitForServer pings server until it wakes up.
-// TODO: should this be an exported method for Graceful?
-func waitForServer() error {
-	tooLate := time.Now().Add(serverWait)
-	for time.Now().Before(tooLate) {
-		time.Sleep(100 * time.Millisecond)
-		if resp, err := http.Get(serverURL); err != nil {
-			// No response yet.
-			continue
-		} else if err = resp.Body.Close(); err != nil {
-			// Shouldn't ever happen.
-			return fmt.Errorf("close response body: %w", err)
-		} else if resp.StatusCode == http.StatusOK {
-			// Server is up and running.
-			return nil
+func ExampleGraceful() {
+	graceful := &Graceful{}
+	graceful.Initialize()
+	defer graceful.Close()
+
+	router := gin.New() // not gin.Default()
+	router.Use(ginzero.Logger())
+	router.GET("/ping", handler.Ping)
+
+	go func() {
+		if err := server.WaitFor(url, timeout); err != nil {
+			log.Logger.Error().Err(err).Msg("Waiting for server")
 		}
+		time.Sleep(25 * time.Millisecond)
+		if err := server.Interrupt(); err != nil {
+			log.Logger.Error().Err(err).Msg("Unable to interrupt server")
+		}
+	}()
+
+	if err := graceful.Serve(router, port); err != nil {
+		log.Logger.Fatal().Err(err).Msg("Running gin server example")
 	}
 
-	return errors.New("server not ready")
+	// Output:
 }

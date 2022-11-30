@@ -3,7 +3,6 @@ package shutdown
 import (
 	"context"
 	"net/http"
-	"os"
 	"os/signal"
 	"strconv"
 	"syscall"
@@ -25,8 +24,7 @@ type Graceful struct {
 // Initialize configures the Graceful object.
 func (g *Graceful) Initialize() {
 	// Create context that listens for the interrupt signal from the OS.
-	// NOTE: this assumes we're running on Linux.
-	//  This code won't work for Apple or Windows.
+	// NOTE: this code assumes we're running on Linux, it won't work for Apple or Windows.
 	g.ctxt, g.stop = signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	g.logger = log.Logger().With().Str("sys", "graceful").Logger()
 }
@@ -51,17 +49,6 @@ func (g *Graceful) Serve(router *gin.Engine, port uint) error {
 	<-g.ctxt.Done()
 
 	return nil
-}
-
-// Interrupt the gin server so that it shuts down.
-func (g *Graceful) Interrupt() {
-	if proc, err := os.FindProcess(os.Getpid()); err != nil {
-		g.logger.Fatal().Err(err).Msg("Unable to find this process")
-	} else if err = proc.Signal(syscall.SIGINT); err != nil {
-		g.logger.Fatal().Err(err).Msg("Unable send self interrupt signal")
-	} else {
-		g.logger.Info().Msg("Interrupt invoked")
-	}
 }
 
 // Close the Graceful object, stopping signal capture.
