@@ -24,7 +24,7 @@ func Exit(c *gin.Context) {
 	c.JSON(http.StatusOK, msg)
 }
 
-// Link returns an HTML page with a list of links to useful server URLs.
+// Link returns an HTML page with a short list of links to useful server URLs.
 //
 // These include:
 //   - /ping
