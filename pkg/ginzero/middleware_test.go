@@ -21,10 +21,8 @@ import (
 )
 
 const (
-	testCode = float64(200)
 	testFrag = "fragment"
 	testIP   = "1.2.3.4"
-	testLvl  = "debug"
 	testMeth = "GET"
 	testMsg  = "Request"
 	testPath = "Never/More"
@@ -33,6 +31,12 @@ const (
 )
 
 func TestLogger(t *testing.T) {
+	testLoggerWithCode(t, http.StatusOK, "debug")
+	testLoggerWithCode(t, http.StatusForbidden, "warn")
+	testLoggerWithCode(t, http.StatusInternalServerError, "error")
+}
+
+func testLoggerWithCode(t *testing.T, testCode int, testLvl string) {
 	logFn := Logger()
 	require.NotNil(t, logFn)
 	ctxt, engine := gin.CreateTestContext(httptest.NewRecorder())
@@ -49,6 +53,7 @@ func TestLogger(t *testing.T) {
 			RawFragment: testFrag,
 		},
 	}
+	ctxt.Status(testCode)
 	require.NotNil(t, ctxt)
 	require.NotNil(t, engine)
 
@@ -62,7 +67,7 @@ func TestLogger(t *testing.T) {
 	// Process log output which is in JSON.
 	var record map[string]interface{}
 	require.NoError(t, json.Unmarshal(buffer.Bytes(), &record))
-	assert.Equal(t, testCode, record["code"])
+	assert.Equal(t, float64(testCode), record["code"])
 	assert.Equal(t, testIP, record["ip"])
 	assert.Equal(t, testLvl, record["level"])
 	assert.Equal(t, testMsg, record["message"])

@@ -14,16 +14,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestPing(t *testing.T) {
-	rec := httptest.NewRecorder()
-	require.NotNil(t, rec)
-	ctx, eng := gin.CreateTestContext(rec)
-	require.NotNil(t, ctx)
-	require.NotNil(t, eng)
-	Ping(ctx)
-	assert.Equal(t, http.StatusOK, rec.Code)
-}
-
 func TestExit(t *testing.T) {
 	rec := httptest.NewRecorder()
 	require.NotNil(t, rec)
@@ -44,4 +34,24 @@ func TestExit(t *testing.T) {
 	}
 	assert.Equal(t, http.StatusOK, rec.Code)
 	assert.True(t, done)
+}
+
+func TestLink(t *testing.T) {
+	rec := httptest.NewRecorder()
+	require.NotNil(t, rec)
+	ctx, eng := gin.CreateTestContext(rec)
+	require.NotNil(t, ctx)
+	require.NotNil(t, eng)
+	Link(ctx)
+	assert.Equal(t, http.StatusOK, rec.Code)
+}
+
+func TestPing(t *testing.T) {
+	rec := httptest.NewRecorder()
+	require.NotNil(t, rec)
+	ctx, eng := gin.CreateTestContext(rec)
+	require.NotNil(t, ctx)
+	require.NotNil(t, eng)
+	Ping(ctx)
+	assert.Equal(t, http.StatusOK, rec.Code)
 }

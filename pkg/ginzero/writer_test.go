@@ -78,6 +78,29 @@ func (suite *WriterTestSuite) TestDefaultDebug() {
 
 // ----------------------------------------------------------------------------
 
+func (suite *WriterTestSuite) TestDefaultGin() {
+	suite.testLog(
+		func(t *testing.T) {
+			_, err := gin.DefaultErrorWriter.Write([]byte("[GIN] TestDefaultGin"))
+			require.NoError(t, err)
+		}, func(t *testing.T, record map[string]interface{}) {
+			assert.Equal(t, "error", record["level"])
+			assert.Contains(t, record["message"], "TestDefaultGin")
+		})
+}
+
+// ----------------------------------------------------------------------------
+
+func (suite *WriterTestSuite) TestDefaultBadLevel() {
+	suite.testLog(
+		func(t *testing.T) {
+			_, err := gin.DefaultErrorWriter.Write([]byte("[BAD] TestDefaultBadLevel"))
+			require.ErrorContains(t, err, "no level BAD")
+		}, nil)
+}
+
+// ----------------------------------------------------------------------------
+
 func (suite *WriterTestSuite) TestDefaultWarning() {
 	suite.testLog(
 		func(t *testing.T) {
@@ -125,16 +148,18 @@ func (suite *WriterTestSuite) testLog(test func(t *testing.T), check func(t *tes
 	log.Logger = zerolog.New(buffer)
 	// Execute test.
 	test(suite.T())
-	// Check log output which is in JSON.
-	var record map[string]interface{}
-	fmt.Println("JSON ", buffer.String())
-	suite.Require().NoError(json.Unmarshal(buffer.Bytes(), &record))
-	check(suite.T(), record)
+	if check != nil {
+		// Check log output which is in JSON.
+		var record map[string]interface{}
+		fmt.Println("JSON ", buffer.String())
+		suite.Require().NoError(json.Unmarshal(buffer.Bytes(), &record))
+		check(suite.T(), record)
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-func ExampleWriter_Writer() {
+func ExampleWriter() {
 	// Switch zerolog to console mode.
 	zerolog.TimestampFunc = func() time.Time {
 		return time.Now().Local()

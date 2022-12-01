@@ -44,7 +44,7 @@ var (
 	}
 	ptn_GIN, _       = regexp.Compile("^\\s*\\[GIN\\]\\s*")
 	ptn_GIN_debug, _ = regexp.Compile("^\\s*\\[GIN-debug\\]\\s*")
-	ptn_log_level, _ = regexp.Compile("^\\s*\\[(DEBUG|ERROR|INFO|WARNING)\\]\\s*")
+	ptn_log_level, _ = regexp.Compile("^\\s*\\[(DEBUG|ERROR|INFO|WARNING|.*)\\]\\s*")
 )
 
 // Write a block of data to the (supposedly) stream object.
