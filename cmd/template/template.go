@@ -23,7 +23,7 @@ var port uint
 
 func main() {
 	flags := flag.NewFlagSet(appName, flag.ContinueOnError)
-	flags.UintVar(&port, "port", 8080, "specify server port with leading colon")
+	flags.UintVar(&port, "port", 8080, "specify server port number")
 
 	cof := logUtils.ConsoleOrFile{}
 	cof.AddFlagsToSet(flags, "/tmp/console-or-file.log")
@@ -38,8 +38,6 @@ func main() {
 		return
 	}
 	defer cof.CloseForDefer()
-
-	// TODO: check port number?
 
 	// Initialize for graceful shutdown.
 	graceful := &shutdown.Graceful{}
