@@ -29,7 +29,7 @@ Support for connecting gin logging to `zerolog`.
 This includes request-logging middleware and
 the capture and reprocessing of `stderr` and `stdout` streams.
 
-There is a demo program located in `demo/ginzerolog/ginzero.go`.
+There is a demo program located in `demo/ginzero/ginzero.go`.
 
 See package `ginzero` documentation for more details.
 
@@ -44,3 +44,11 @@ These include:
 
 ## Application Template
 
+There is an executable template application in `cmd/template/template.go`.
+
+The template utilizes:
+* `ginzero` to redirect all `gin` messaging through `zerolog`,
+* `shutdown` to implement graceful shutdown, and
+* `handler` for a few simple handlers (remove later)
+
+This template is intended to be copied into another project as a starting point.
