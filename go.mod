@@ -1,4 +1,4 @@
-module gin-utils
+module github.com/madkins23/gin-utils
 
 go 1.18
 
