@@ -21,7 +21,7 @@ so it won't work (completely) with Apple or Windows.
 
 There is a demo program located in `demo/shutdown/shutdown.go`.
 
-See package `shutdown` documentation for more details.
+See package `shutdown` [documentation](https://pkg.go.dev/github.com/madkins23/gin-utils/pkg/shutdown) for more details.
 
 # Logging via `zerolog`
 
@@ -31,7 +31,7 @@ the capture and reprocessing of `stderr` and `stdout` streams.
 
 There is a demo program located in `demo/ginzero/ginzero.go`.
 
-See package `ginzero` documentation for more details.
+See package `ginzero` [documentation](https://pkg.go.dev/github.com/madkins23/gin-utils/pkg/ginzero) for more details.
 
 ## Simple Handlers
 
@@ -41,6 +41,8 @@ These include:
 * `Ping` handler to return a 200 "Pong!" response.
 * `Exit` handler to send a `SIGINT` signal to the current process,
   thereby ending the service.
+
+See package `handler` [documentation](https://pkg.go.dev/github.com/madkins23/gin-utils/pkg/handler) for more details.
 
 ## Application Template
 
