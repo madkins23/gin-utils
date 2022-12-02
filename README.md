@@ -8,10 +8,10 @@ Can provide:
 * Some simple [`gin`](https://github.com/gin-gonic/gin) handlers
 * Template application using [`gin`](https://github.com/gin-gonic/gin) and [`zerolog`](https://github.com/rs/zerolog)
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/madkins23/gin-zerolog)](https://goreportcard.com/report/github.com/madkins23/gin-zerolog)
-![GitHub](https://img.shields.io/github/license/madkins23/gin-zerolog)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/madkins23/gin-zerolog)
-[![Go Reference](https://pkg.go.dev/badge/github.com/madkins23/gin-zerolog.svg)](https://pkg.go.dev/github.com/madkins23/gin-zerolog)
+[![Go Report Card](https://goreportcard.com/badge/github.com/madkins23/gin-utils)](https://goreportcard.com/report/github.com/madkins23/gin-utils)
+![GitHub](https://img.shields.io/github/license/madkins23/gin-utils)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/madkins23/gin-utils)
+[![Go Reference](https://pkg.go.dev/badge/github.com/madkins23/gin-utils.svg)](https://pkg.go.dev/github.com/madkins23/gin-utils)
 
 # Graceful Shutdown
 
