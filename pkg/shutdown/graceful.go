@@ -68,7 +68,6 @@ func (g *Graceful) Close() {
 			if err := g.server.Shutdown(ctxt); err != nil {
 				g.logger.Error().Err(err).Msg("Server forced to shutdown")
 			}
-
 		}
 
 		g.closed = true

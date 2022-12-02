@@ -55,3 +55,23 @@ func TestPing(t *testing.T) {
 	Ping(ctx)
 	assert.Equal(t, http.StatusOK, rec.Code)
 }
+
+func TestAdapted(t *testing.T) {
+	rec := httptest.NewRecorder()
+	require.NotNil(t, rec)
+	ctx, eng := gin.CreateTestContext(rec)
+	require.NotNil(t, ctx)
+	require.NotNil(t, eng)
+	Adapt(&AdaptedHandler{})(ctx)
+	assert.Equal(t, http.StatusOK, rec.Code)
+}
+
+func TestAdaptedFunc(t *testing.T) {
+	rec := httptest.NewRecorder()
+	require.NotNil(t, rec)
+	ctx, eng := gin.CreateTestContext(rec)
+	require.NotNil(t, ctx)
+	require.NotNil(t, eng)
+	AdaptFunc(AdaptedFunc)(ctx)
+	assert.Equal(t, http.StatusOK, rec.Code)
+}

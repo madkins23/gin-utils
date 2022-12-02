@@ -51,11 +51,12 @@ func main() {
 
 	router.GET("/link", handler.Link)
 	router.GET("/ping", handler.Ping)
+	router.GET("/adaptFn", handler.AdaptFunc(handler.AdaptedFunc))
+	router.GET("/adapted", handler.Adapt(&handler.AdaptedHandler{}))
 	router.GET("/exit", handler.Exit)
 
 	log.Logger.Info().Msgf("Application %s starting", appName)
 	log.Logger.Info().Msgf("> http://localhost:%d/link", port)
-	log.Logger.Info().Msgf("> http://localhost:%d/ping", port)
 	log.Logger.Info().Msgf("> http://localhost:%d/exit", port)
 	defer log.Logger.Info().Msgf("Application %s finished", appName)
 
