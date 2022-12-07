@@ -7,6 +7,8 @@ Can provide:
 * Redirection of [`gin`](https://github.com/gin-gonic/gin) log messages to [`zerolog`](https://github.com/rs/zerolog)
 * Some simple [`gin`](https://github.com/gin-gonic/gin) handlers
 * Template application using [`gin`](https://github.com/gin-gonic/gin) and [`zerolog`](https://github.com/rs/zerolog)
+* System utility:
+  * Configuration struct with JSON and YAML struct tags.
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/madkins23/gin-utils)](https://goreportcard.com/report/github.com/madkins23/gin-utils)
 ![GitHub](https://img.shields.io/github/license/madkins23/gin-utils)
@@ -54,3 +56,13 @@ The template utilizes:
 * `handler` for a few simple handlers (remove later)
 
 This template is intended to be copied into another project as a starting point.
+
+## System Utility
+
+### Configuration
+
+The `system.Config` struct collects `gin` configuration items in one place.
+At the current time there is only `Port`.
+
+The `Config.AddFlagsToSet()` method will configure a `port` flag in the
+specified `flag.FlagSet`.
