@@ -12,32 +12,44 @@ import (
 
 	logUtils "github.com/madkins23/go-utils/log"
 
-	"gin-utils/pkg/ginzero"
-	"gin-utils/pkg/handler"
-	"gin-utils/pkg/shutdown"
+	"github.com/madkins23/gin-utils/pkg/ginzero"
+	"github.com/madkins23/gin-utils/pkg/handler"
+	"github.com/madkins23/gin-utils/pkg/shutdown"
+	"github.com/madkins23/gin-utils/pkg/system"
 )
 
+// appName is the name of this application.
 const appName = "template"
 
-var port uint
+// Config collects all configuration information.
+// Use json and yaml struct attributes as needed in any embedded structs.
+type Config struct {
+	// Configuration object for gin.
+	Gin system.Config `json:"gin" yaml:"gin"`
+
+	// Configuration object for zerolog.
+	Log logUtils.ConsoleOrFile `json:"log" yaml:"log"`
+
+	// Other configuration items may be added as required.
+}
 
 func main() {
 	flags := flag.NewFlagSet(appName, flag.ContinueOnError)
-	flags.UintVar(&port, "port", 8080, "specify server port number")
 
-	cof := logUtils.ConsoleOrFile{}
-	cof.AddFlagsToSet(flags, "/tmp/console-or-file.log")
+	var config Config
+	config.Gin.AddFlagsToSet(flags)
+	config.Log.AddFlagsToSet(flags, "/tmp/console-or-file.log")
 	if err := flags.Parse(os.Args[1:]); err != nil {
 		if !errors.Is(err, flag.ErrHelp) {
 			fmt.Printf("Error parsing command line flags: %s", err)
 		}
 		return
 	}
-	if err := cof.Setup(); err != nil {
+	if err := config.Log.Setup(); err != nil {
 		fmt.Printf("Log file creation error: %s", err)
 		return
 	}
-	defer cof.CloseForDefer()
+	defer config.Log.CloseForDefer()
 
 	// Initialize for graceful shutdown.
 	graceful := &shutdown.Graceful{}
@@ -56,11 +68,11 @@ func main() {
 	router.GET("/exit", handler.Exit)
 
 	log.Logger.Info().Msgf("Application %s starting", appName)
-	log.Logger.Info().Msgf("> http://localhost:%d/link", port)
-	log.Logger.Info().Msgf("> http://localhost:%d/exit", port)
+	log.Logger.Info().Msgf("> http://localhost:%d/link", config.Gin.Port)
+	log.Logger.Info().Msgf("> http://localhost:%d/exit", config.Gin.Port)
 	defer log.Logger.Info().Msgf("Application %s finished", appName)
 
-	if err := graceful.Serve(router, port); err != nil {
+	if err := graceful.Serve(router, config.Gin.Port); err != nil {
 		log.Fatal().Err(err).Msg("Running gin server")
 	}
 }

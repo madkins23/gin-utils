@@ -2,7 +2,8 @@
 demo of ginzero package to support using [zerolog] with [gin].
 
 Once running the application responds to http://:55555/ping with:
-  {"message":"pong"}
+
+	{"message":"pong"}
 
 [gin]: https://gin-gonic.com/docs/
 [zerolog]: https://github.com/rs/zerolog
@@ -16,8 +17,8 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
-	"gin-utils/pkg/ginzero"
-	"gin-utils/pkg/handler"
+	"github.com/madkins23/gin-utils/pkg/ginzero"
+	"github.com/madkins23/gin-utils/pkg/handler"
 )
 
 func main() {

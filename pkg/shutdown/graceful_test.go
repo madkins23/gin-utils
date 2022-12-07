@@ -14,8 +14,8 @@ import (
 
 	"github.com/madkins23/go-utils/server"
 
-	"gin-utils/pkg/ginzero"
-	"gin-utils/pkg/handler"
+	"github.com/madkins23/gin-utils/pkg/ginzero"
+	"github.com/madkins23/gin-utils/pkg/handler"
 )
 
 const (

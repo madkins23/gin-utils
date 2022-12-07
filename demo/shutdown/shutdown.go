@@ -2,7 +2,8 @@
 demo of shutdown package to support graceful server shutdown.
 
 Once running the application responds to http://:55555/ping with:
-  {"message":"pong"}
+
+	{"message":"pong"}
 
 [gin]: https://gin-gonic.com/docs/
 */
@@ -13,8 +14,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"gin-utils/pkg/handler"
-	"gin-utils/pkg/shutdown"
+	"github.com/madkins23/gin-utils/pkg/handler"
+	"github.com/madkins23/gin-utils/pkg/shutdown"
 )
 
 func main() {
