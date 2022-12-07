@@ -11,9 +11,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/madkins23/go-utils/log"
 	"github.com/rs/zerolog"
+
+	"github.com/madkins23/gin-utils/pkg/system"
 )
 
 type Graceful struct {
+	// Embed configuration information.
+	// If not provided port can be specified in Serve() method.
+	system.Config
 	ctxt   context.Context
 	stop   context.CancelFunc
 	logger zerolog.Logger
@@ -32,6 +37,10 @@ func (g *Graceful) Initialize() {
 // Serve executes the gin service as defined.
 // Service is done in a separate goroutine but this method waits until service is done.
 func (g *Graceful) Serve(router *gin.Engine, port uint) error {
+	if port == 0 {
+		port = g.Port
+	}
+
 	// Build http.Server object manually, don't use gin.Run().
 	g.server = &http.Server{
 		Addr:    ":" + strconv.Itoa(int(port)),

@@ -52,7 +52,7 @@ func main() {
 	defer config.Log.CloseForDefer()
 
 	// Initialize for graceful shutdown.
-	graceful := &shutdown.Graceful{}
+	graceful := &shutdown.Graceful{Config: config.Gin}
 	graceful.Initialize()
 	defer graceful.Close()
 
@@ -72,7 +72,7 @@ func main() {
 	log.Logger.Info().Msgf("> http://localhost:%d/exit", config.Gin.Port)
 	defer log.Logger.Info().Msgf("Application %s finished", appName)
 
-	if err := graceful.Serve(router, config.Gin.Port); err != nil {
+	if err := graceful.Serve(router, 0); err != nil {
 		log.Fatal().Err(err).Msg("Running gin server")
 	}
 }
