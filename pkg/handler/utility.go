@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -23,26 +24,86 @@ func Exit(c *gin.Context) {
 	writeCenteredText(c.Writer, "Exit", "Server shutting down via SIGINT")
 }
 
-// Link returns an HTML page with a short list of links to useful server URLs.
+//------------------------------------------------------------------------
+
+// Link returns an HTML page with a short list of links to useful(?) server URLs.
 //
-// These include:
+// The links are:
 //   - /ping
 //   - /exit
 //
 // The server must be configured with these routes or the links won't work.
+//
+// Deprecated: this is probably not ever going to be used and may be removed
+// in a future major release.
 func Link(c *gin.Context) {
-	writePage(c.Writer, "link", htmlLinks)
+	Links(c, LinkTableStyleSheet,
+		LinkDef{"/ping", "Ping", "server existence"},
+		LinkDef{"/exit", "Exit", "graceful shut down"})
 }
 
-const htmlLinks = `
-<head><title>Links</title></head>
-<body><ul>
-  <li><a href="/ping">Ping</a> server existence</li>
-  <li><a href="/adapted">AdaptedHandler</a> demo http.Handler adapter</li>
-  <li><a href="/adaptFn">AdaptedFunc</a> demo http.HandlerFunc adapter</li>
-  <li><a href="/exit">Exit</a> graceful shut down</li>
-</ul></body>
+// LinkTableStyleSheet is the default style sheet for use in Links().
+const LinkTableStyleSheet = `
+    table.links {
+      border-collapse: collapse;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    table.links td.link {
+        text-align: right;
+    }
+
+    table.links td.description {
+        font-style: italic;
+    }
+
+    table.links td.spacer {
+        width: 1em;
+    }
 `
+
+// LinkDef defines a link for use in the Links() function.
+type LinkDef struct {
+	Path        string
+	Name        string
+	Description string
+}
+
+// Links returns an HTML page with a short list of links to useful server URLs.
+// The links are provided by argument and are displayed in a simple table.
+// A stylesheet may be provided (and may be "") or the default LinkTableStyleSheet is used.
+//
+// This function can't be passed directly as a handler as it has too many arguments.
+// Surround it with another function that has a single *gin.Context argument
+// and no return values.
+//
+// The server must be configured with all defined links.
+func Links(c *gin.Context, styleSheet string, links ...LinkDef) {
+	var page strings.Builder
+	page.WriteString("<head>\n  <title>Links</title>")
+	if styleSheet == "" {
+		styleSheet = LinkTableStyleSheet
+	}
+	page.WriteString("  <style>\n")
+	page.WriteString(styleSheet)
+	page.WriteString("  </style>\n")
+	page.WriteString("</head>\n<body>\n")
+	page.WriteString("  <table class=\"links\">\n")
+	for _, link := range links {
+		_, _ = fmt.Fprintf(&page,
+			"<tr>"+
+				"<td class=\"link\"><a href=\"%s\">%s</a></td>"+
+				"<td class=\"spacer\"></td>"+
+				"<td class=\"descr\">%s</td>"+
+				"</tr>\n",
+			link.Path, link.Name, link.Description)
+	}
+	page.WriteString("  </table>\n</body>\n")
+	writePage(c.Writer, "links", page.String())
+}
+
+//------------------------------------------------------------------------
 
 // Ping returns a simple JSON object containing the message "pong".
 func Ping(c *gin.Context) {

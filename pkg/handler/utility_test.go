@@ -37,6 +37,7 @@ func TestExit(t *testing.T) {
 }
 
 func TestLink(t *testing.T) {
+	// Link() calls Links() so tests both.
 	rec := httptest.NewRecorder()
 	require.NotNil(t, rec)
 	ctx, eng := gin.CreateTestContext(rec)
