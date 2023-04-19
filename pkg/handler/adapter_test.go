@@ -10,7 +10,7 @@ import (
 
 var ginHandlerFunc = gin.HandlerFunc(ghf)
 
-func ghf(ctx *gin.Context) {}
+func ghf(_ *gin.Context) {}
 
 func TestAdapt(t *testing.T) {
 	hdlr := &AdaptedHandler{}
