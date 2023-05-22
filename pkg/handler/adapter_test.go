@@ -49,7 +49,7 @@ func TestAdaptedFunc(t *testing.T) {
 }
 
 //////////////////////////////////////////////////////////////////////////
-// Pages that test adapting http.Handler and http.HandlerFunc to gin.HandlerFunc.
+// Pages that test adapting http.Wrapper and http.HandlerFunc to gin.HandlerFunc.
 
 // Make certain that adaptedHandler implements the http.Handler interface.
 var _ = http.Handler(&adaptedHandler{})
@@ -59,7 +59,7 @@ type adaptedHandler struct{}
 
 // ServeHTTP method defined so that adaptedHandler implements the http.Handler interface.
 func (hh *adaptedHandler) ServeHTTP(writer http.ResponseWriter, _ *http.Request) {
-	writeCenteredText(writer, "Adapted Handler", "Adapt http.Handler to gin.HandlerFunc")
+	writeCenteredText(writer, "Adapted Wrapper", "Adapt http.Wrapper to gin.HandlerFunc")
 }
 
 // adaptedFunc returns a page demonstrating the use of handler.AdapterFunc.
