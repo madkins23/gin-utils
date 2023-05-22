@@ -61,24 +61,18 @@ func main() {
 	router := gin.New() // not gin.Default()
 	router.Use(ginzero.Logger())
 
-	router.GET("/link", handler.Link)
 	router.GET("/links", func(c *gin.Context) {
 		handler.Links(c, "",
-			handler.LinkDef{"/link", "Link", "simple links page"},
 			handler.LinkDef{"/links", "Links", "custom links page (this one)"},
 			handler.LinkDef{"/ping", "Ping", "server existence"},
-			handler.LinkDef{"/adapted", "AdaptedHandler", "demo http.Handler adapter"},
-			handler.LinkDef{"/adaptFn", "AdaptedFunc", "demo http.HandlerFunc adapter"},
 			handler.LinkDef{"/exit", "Exit", "graceful shut down"})
 	})
 	router.GET("/ping", handler.Ping)
-	router.GET("/adaptFn", handler.AdaptFunc(handler.AdaptedFunc))
-	router.GET("/adapted", handler.Adapt(&handler.AdaptedHandler{}))
 	router.GET("/exit", handler.Exit)
 
 	log.Logger.Info().Msgf("Application %s starting", appName)
-	log.Logger.Info().Msgf("> http://localhost:%d/link", config.Gin.Port)
 	log.Logger.Info().Msgf("> http://localhost:%d/links", config.Gin.Port)
+	log.Logger.Info().Msgf("> http://localhost:%d/ping", config.Gin.Port)
 	log.Logger.Info().Msgf("> http://localhost:%d/exit", config.Gin.Port)
 	defer log.Logger.Info().Msgf("Application %s finished", appName)
 

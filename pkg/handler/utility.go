@@ -113,25 +113,11 @@ func Ping(c *gin.Context) {
 }
 
 //////////////////////////////////////////////////////////////////////////
-// Pages that test adapting http.Handler and http.HandlerFunc to gin.HandlerFunc.
 
-// Make certain that AdaptedHandler implements the http.Handler interface.
-var _ = http.Handler(&AdaptedHandler{})
-
-// AdaptedHandler is an http.Handler that returns a page demonstrating the use of handler.Adapter.
-type AdaptedHandler struct{}
-
-// ServeHTTP method defined so that AdaptedHandler implements the http.Handler interface.
-func (hh *AdaptedHandler) ServeHTTP(writer http.ResponseWriter, _ *http.Request) {
-	writeCenteredText(writer, "Adapted Handler", "Adapt http.Handler to gin.HandlerFunc")
-}
-
-// AdaptedFunc returns a page demonstrating the use of handler.AdapterFunc.
-func AdaptedFunc(writer http.ResponseWriter, _ *http.Request) {
-	writeCenteredText(writer, "Adapted HandlerFunc", "Adapt http.HandlerFunc to gin.HandlerFunc")
-}
-
-//////////////////////////////////////////////////////////////////////////
+const htmlCenteredText = `
+<head><title>[TITLE]</title></head>
+<body><center>[TEXT]</center></body>
+`
 
 // centeredText returns an HTML page with the specified title and
 // the specified text centered on the page.
@@ -140,11 +126,6 @@ func centeredText(title string, text string) string {
 		"[TITLE]", title, 1),
 		"[TEXT]", text, 1)
 }
-
-const htmlCenteredText = `
-<head><title>[TITLE]</title></head>
-<body><center>[TEXT]</center></body>
-`
 
 // writePage writes an HTML page.
 func writePage(writer http.ResponseWriter, pageName string, html string) {
