@@ -15,7 +15,7 @@ Can provide:
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/madkins23/gin-utils)
 [![Go Reference](https://pkg.go.dev/badge/github.com/madkins23/gin-utils.svg)](https://pkg.go.dev/github.com/madkins23/gin-utils)
 
-# Graceful Shutdown
+## Graceful Shutdown
 
 Support graceful shutdown of `gin` during an interrupt signal.
 This tool captures the Linux `interrupt` and `kill` signals,
@@ -25,7 +25,7 @@ There is a demo program located in `demo/shutdown/shutdown.go`.
 
 See package `shutdown` [documentation](https://pkg.go.dev/github.com/madkins23/gin-utils/pkg/shutdown) for more details.
 
-# Logging via `zerolog`
+## Logging via `zerolog`
 
 Support for connecting gin logging to `zerolog`.
 This includes request-logging middleware and
@@ -35,7 +35,13 @@ There is a demo program located in `demo/ginzero/ginzero.go`.
 
 See package `ginzero` [documentation](https://pkg.go.dev/github.com/madkins23/gin-utils/pkg/ginzero) for more details.
 
-## Simple Handlers
+## Handlers
+
+Various support elements for configuring `gin` handlers are described in the following sections.
+
+See package `handler` [documentation](https://pkg.go.dev/github.com/madkins23/gin-utils/pkg/handler) for more details.
+
+### Simple Handlers
 
 A small collection of simpler `gin` handlers is provided in the `handler` package.
 These include:
@@ -44,7 +50,14 @@ These include:
 * `Exit` handler to send a `SIGINT` signal to the current process,
   thereby ending the service.
 
-See package `handler` [documentation](https://pkg.go.dev/github.com/madkins23/gin-utils/pkg/handler) for more details.
+### Handler Wrapper
+
+The `handler.Wrapper` mechanism can encapsulate an arbitrary object instantiating `handler.CanServe`.
+Once created, this object can return a `gin.HandlerFunc` to be used when configuring `gin`.
+
+### Results
+
+The `handler.ErrorResult` function will return a generic error page.
 
 ## Application Template
 
