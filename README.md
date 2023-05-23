@@ -54,6 +54,8 @@ These include:
 
 The `handler.Wrapper` mechanism can encapsulate an arbitrary object instantiating `handler.CanServe`.
 Once created, this object can return a `gin.HandlerFunc` to be used when configuring `gin`.
+The main use is to pass in options to be invoked within the handler function thus returned,
+which at this time is just a Cross-Origin Resource Sharing (CORS) flag.
 
 ### Results
 
