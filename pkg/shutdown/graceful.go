@@ -19,8 +19,9 @@ type Graceful struct {
 	// Embed configuration information.
 	// If not provided port can be specified in Serve() method.
 	system.Config
-	ctxt   context.Context
-	stop   context.CancelFunc
+	ctxt context.Context
+	stop context.CancelFunc
+	// TODO: Replace this with slog.Logger with all of the fallout that entails.
 	logger zerolog.Logger
 	server *http.Server
 	closed bool
